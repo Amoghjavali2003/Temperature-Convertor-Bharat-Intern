@@ -1,0 +1,79 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+
+public class TemperatureConverterGUI {
+    private JFrame frame;
+    private JTextField celsiusField;
+    private JTextField fahrenheitField;
+
+    public TemperatureConverterGUI() {
+        frame = new JFrame("Temperature Converter");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new GridLayout(3, 3));
+        frame.setPreferredSize(new Dimension(600, 240));
+        frame.setResizable(false);
+
+        JLabel celsiusLabel = new JLabel("Celsius: ");
+        celsiusField = new JTextField(10);
+        celsiusField.setHorizontalAlignment(SwingConstants.RIGHT);
+
+        JLabel fahrenheitLabel = new JLabel("Fahrenheit: ");
+        fahrenheitField = new JTextField(10);
+        fahrenheitField.setHorizontalAlignment(SwingConstants.RIGHT);
+        fahrenheitField.setEditable(false);
+
+        JButton convertButton = new JButton("Convert");
+        convertButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                convertTemperature();
+            }
+       
+        });
+        JButton clearButton = new JButton("Clear");
+        clearButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                clearEntry();
+            }
+        });
+
+        frame.add(celsiusLabel);
+        frame.add(celsiusField);
+        frame.add(fahrenheitLabel);
+        frame.add(fahrenheitField);
+        frame.add(convertButton);
+        frame.add(clearButton);
+
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    private void convertTemperature() {
+        try {
+            double celsius = Double.parseDouble(celsiusField.getText());
+            double fahrenheit = (celsius * 9 / 5) + 32;
+            DecimalFormat df = new DecimalFormat("#.##");
+            fahrenheitField.setText(df.format(fahrenheit));
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(frame, "Invalid input. Please enter a valid number.");
+        }
+    }
+
+    public void clearEntry(){
+        celsiusField.setText("");
+        fahrenheitField.setText("");
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new TemperatureConverterGUI();
+            }
+        });
+    }
+}
